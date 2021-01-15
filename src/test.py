@@ -6,7 +6,6 @@ from torch.utils.data import Dataset, DataLoader
 from visualize import *
 from model import *
 
-test_df = pd.read_csv('../input/global-wheat-detection/sample_submission.csv')
 
 # Dataset class for evaluation.
 class eval_dataset(Dataset):
@@ -40,12 +39,14 @@ class eval_dataset(Dataset):
 test_dataset = eval_dataset(test_df, test_dir, transforms=T.Compose([T.ToTensor()]))
 test_loader = DataLoader(test_dataset, batch_size=4, shuffle=False, num_workers=8, drop_last=False, collate_fn=collate_fn)
 
+
 def format_prediction_string(boxes, scores):
     pred_strings = []
     for j in zip(scores, boxes):
         pred_strings.append("{0:.4f} {1} {2} {3} {4}".format(j[0], j[1][0], j[1][1], j[1][2], j[1][3]))
 
     return " ".join(pred_strings)
+
 
 def evaluate(device, model):
     
@@ -75,7 +76,7 @@ def evaluate(device, model):
 
             plt.figure(figsize=(8,8))
             plt.axis('off')
-            plt.title('Image ID: '+image_id)
+            plt.title('Image ID: '+image_id, fontdict={'color':'cyan')
             plt.imshow(rect)
             plt.show()
 
