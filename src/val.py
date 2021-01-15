@@ -21,7 +21,7 @@ def val_fn(dataloader, model, device, display_random=False, show_img_num=None):
         image ID.
     '''
     model.eval()
-    all_predictions = []
+    predictions = []
     
     with torch.no_grad():
         
@@ -40,7 +40,7 @@ def val_fn(dataloader, model, device, display_random=False, show_img_num=None):
                 scores = output[i]['scores'].detach().cpu().numpy()
 
                 # boxes_itr = boxes
-                all_predictions.append({
+                predictions.append({
                     'pred_boxes': (boxes).astype(int),
                     'scores': scores,
                     'gt_boxes': (targets[i]['boxes'].cpu().numpy()).astype(int),
@@ -57,4 +57,4 @@ def val_fn(dataloader, model, device, display_random=False, show_img_num=None):
                     gts = (targets[i]['boxes'].cpu().numpy()).astype(int)
                     val_show(gts, df_val, boxes, image_id[i])
                 
-    return all_predictions
+    return predictions

@@ -14,7 +14,7 @@ from datasets import *
 def collate_fn(batch):
     return tuple(zip(*batch))
 
-def engine_fn(device, model_path=None, init_epoch=None, resume=False):
+def engine(device, model_path=None, init_epoch=None, resume=False):
     '''
     Main funtion to train and validate.
     Args:
@@ -23,10 +23,10 @@ def engine_fn(device, model_path=None, init_epoch=None, resume=False):
         init_epoch: initial epoch to resume training from.
         resume: to resume training from last epoch.
     Return:
-        cv_score
+        final_score
     '''
     
-    cv_score = []
+    final_score = []
     best_score = 0
     
     # Custom DataLoaders
@@ -68,7 +68,7 @@ def engine_fn(device, model_path=None, init_epoch=None, resume=False):
         if valid_score > best_score:
                 best_score = valid_score
                 torch.save(model.state_dict(), f'frcnn_best_{epoch}.pth')
-                torch.save(model, f'frcnn_best_model_epoch_{epoch}') 
-        cv_score.append([best_score, epoch])
+#                 torch.save(model, f'frcnn_best_model_epoch_{epoch}') 
+        final_score.append([best_score, epoch])
         
-    return cv_score
+    return final_score

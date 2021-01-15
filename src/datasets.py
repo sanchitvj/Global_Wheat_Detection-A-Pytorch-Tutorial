@@ -3,78 +3,70 @@ import numpy as np
 import pandas as pd
 from torch.utils.data import Dataset
 
-# Getting a key-value pair to separate training images into
-# training data and validation data. Used for dataloading
-# purpose.
-train_img = {}
-val_img = {}
-img = glob.glob(train_dir + '/*.jpg')
-n = len(img)
-
-# 95% data for training
-train_keys = img[:int(0.95*n)]
-val_keys = img[int(0.95*n):]
-
-split_dict = {}
-for key in train_keys:
-    split_dict[key] = 'train'
-for key in val_keys:
-    split_dict[key] = 'val'
+def get_dict_list():
     
-for i in img:
-    temp = i.split('/')[-1]
-    img_name = temp.split('.')[0]
-    orig_path = train_dir + img_name.split('_')[0] + '.jpg'
-    if (split_dict[orig_path] == 'train'):
-        train_img[img_name] = i
-    else:
-        val_img[img_name] = i
+    # Getting a key-value pair to separate training images into
+    # training data and validation data. Used for dataloading
+    # purpose.
+    train_img_dict = {}
+    val_img_dict = {}
+    img = glob.glob(train_dir + '/*.jpg')
+    n = len(img)
 
-# Appending training and validation image paths to 
-# corresponding lists to create separate dataframes.
-train_img_list = []
-val_img_list = []
+    # 95% data for training
+    train_keys = img[:int(0.95*n)]
+    val_keys = img[int(0.95*n):]
 
-for i in img:
-    temp = i.split('/')[-1]
-    img_name = temp.split('.')[0]
-    orig_path = train_dir + img_name.split('_')[0] + '.jpg'
-    if (split_dict[orig_path] == 'train'):
-        train_img_list.append(img_name)
-    else:
-        val_img_list.append(img_name)
+    split_dict = {}
+    for key in train_keys:
+        split_dict[key] = 'train'
+    for key in val_keys:
+        split_dict[key] = 'val'
 
-# Creating a separate dataframe for training images
-image_id = []
-bbox = []
-for i in range(len(train_img_list)):
+    for i in img:
+        temp = i.split('/')[-1]
+        img_name = temp.split('.')[0]
+        orig_path = train_dir + img_name.split('_')[0] + '.jpg'
+        if (split_dict[orig_path] == 'train'):
+            train_img_dict[img_name] = i
+        else:
+            val_img_dict[img_name] = i
+            
+    # Appending training and validation image paths to 
+    # corresponding lists to create separate dataframes.
+    train_img_list = []
+    val_img_list = []
+
+    for i in img:
+        temp = i.split('/')[-1]
+        img_name = temp.split('.')[0]
+        orig_path = train_dir + img_name.split('_')[0] + '.jpg'
+        if (split_dict[orig_path] == 'train'):
+            train_img_list.append(img_name)
+        else:
+            val_img_list.append(img_name)
+            
+    return train_img_dict, val_img_dict, train_img_list, val_img_list
+
+# Function for creating a separate dataframe for training and validation images
+def create_df(img_list):
     
-    for img_id, box in zip(df['image_id'].values, df['bbox'].values):
-        
-        if train_img_list[i] == img_id:
-            image_id.append(img_id)
-            bbox.append(box)
+    image_id = []
+    bbox = []
+    for i in range(len(img_list)):
 
-df_train = pd.DataFrame()
-df_train['image_id'] = image_id
-df_train['bbox'] = bbox
-# df_train
+        for img_id, box in zip(df['image_id'].values, df['bbox'].values):
 
-# Creating a separate dataframe for validation images
-image_id = []
-bbox = []
-for i in range(len(val_img_list)):
+            if img_list[i] == img_id:
+                image_id.append(img_id)
+                bbox.append(box)
+
+    df_new = pd.DataFrame()
+    df_new['image_id'] = image_id
+    df_new['bbox'] = bbox
     
-    for img_id, box in zip(df['image_id'].values, df['bbox'].values):
-        
-        if val_img_list[i] == img_id:
-            image_id.append(img_id)
-            bbox.append(box)
+    return df_new
 
-df_val = pd.DataFrame()
-df_val['image_id'] = image_id
-df_val['bbox'] = bbox
-# df_val
 
 class dataset(Dataset):
     def __init__(self, df, train=True, transforms=None):
