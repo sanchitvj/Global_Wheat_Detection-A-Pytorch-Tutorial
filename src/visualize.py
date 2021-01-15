@@ -67,15 +67,15 @@ def show_image(img_dir, dataframe, boxes_pred=None, show=False, idx=None, image_
         if boxes_pred is None:
             plt.figure(figsize=(8,8))
             plt.axis('off')
-            plt.title('Image ID: '+image_id)
+            plt.title('Image ID: '+image_id, fontdict={'color':'cyan'})
             plt.imshow(gt_rect)
             plt.show()
 
         else:
             plt.figure(figsize=(8,8))
             plt.axis('off')
-            plt.title('Image ID: '+image_id+'       Green: Ground Truth, Box Count: '+str(len(boxes_gt))
-            +'     Red: Predicted, Box Count: '+str(len(boxes_pred)))
+            plt.title('Image ID: '+image_id+'      Green: Ground Truth, Box Count: '+str(len(boxes_gt))
+            +'     Red: Predicted, Box Count: '+str(len(boxes_pred)), fontdict={'color':'cyan'})
             plt.imshow(pred_rect)
             plt.show()
 
@@ -106,5 +106,5 @@ def val_show(gts, dataframe, boxes, image_id):
         boxes_pred_itr.append(boxes[best_match_gt_idx])
     
     # for removing duplicate boxes
-    boxes_pred = list(set(tuple(sub) for sub in boxes_pred_itr))
+    boxes_pred = list(set(tuple(box) for box in boxes_pred_itr))
     show_image(train_dir, dataframe, boxes_pred, show=True, image_id=image_id)
