@@ -4,6 +4,7 @@ from torchvision.models.detection.faster_rcnn import AnchorGenerator, FastRCNNPr
 from torchvision.models.detection import fasterrcnn_resnet50_fpn
 from torchvision.models import mobilenet_v2, resnet101, vgg19
 
+
 # https://pytorch.org/tutorials/intermediate/torchvision_tutorial.html
 def get_model(num_classes, backbone = None):
     '''
@@ -26,6 +27,7 @@ def get_model(num_classes, backbone = None):
         backbone_ft = net.features
         backbone_ft.out_channels = 512 
     
+    # https://stackoverflow.com/questions/58362892/resnet-18-as-backbone-in-faster-r-cnn
     elif backbone == 'resnet101':
         net = resnet101(pretrained = True)
         modules = list(net.children())[:-1]
@@ -37,8 +39,7 @@ def get_model(num_classes, backbone = None):
         model = fasterrcnn_resnet50_fpn(pretrained = True)
         in_features = model.roi_heads.box_predictor.cls_score.in_features
         # print(in_features) = 1024
-        model.roi_heads.box_predictor = FastRCNNPredictor(in_features,
-                                                          num_classes)
+        model.roi_heads.box_predictor = FastRCNNPredictor(in_features, num_classes)
         return model
     
     else:
