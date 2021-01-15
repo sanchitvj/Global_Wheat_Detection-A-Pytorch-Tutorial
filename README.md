@@ -22,4 +22,8 @@ Download the saved model from [here](https://drive.google.com/file/d/1cQX-RtX2uR
 
 ## Validation Output Sample
 ![test1](https://github.com/sanchitvj/Global_Wheat_Detection-A-Pytorch-Tutorial/blob/master/validation_output/__results___22_29.png)
-![test2](https://github.com/sanchitvj/Global_Wheat_Detection-A-Pytorch-Tutorial/blob/master/validation_output/__results___22_58.png)
+![test2](https://github.com/sanchitvj/Global_Wheat_Detection-A-Pytorch-Tutorial/blob/master/validation_output/__results___22_46.png)
+
+## Test Output Sample  
+![test3](https://github.com/sanchitvj/Global_Wheat_Detection-A-Pytorch-Tutorial/blob/master/test_output/__results___31_0.png)
+![test4](https://github.com/sanchitvj/Global_Wheat_Detection-A-Pytorch-Tutorial/blob/master/test_output/__results___31_4.png)
